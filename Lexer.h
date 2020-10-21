@@ -40,12 +40,28 @@ public:
 			return;
 		}
 
-		unsigned char b;
+		// Build the alphabet
+		char b;
 		while (b = alphaIn.get()) {
-			if (alphaIn.eof())
-				break;
 			if (b == '\n')
 				break;
+			alphabet[b] = LETTER;
+		}
+		while (b = alphaIn.get()) {
+			if (b == '\n')
+				break;
+			alphabet[b] = DIGIT;
+		}
+		while (b = alphaIn.get()) {
+			if (b == '\n' || alphaIn.eof())
+				break;
+			alphabet[b] = SYMBOL;
+		}
+
+		unordered_map<char, charType>::iterator it;
+		while (it != alphabet.end()) {
+			cout << it->first;
+			it++;
 		}
 
 	}
