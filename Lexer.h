@@ -11,14 +11,15 @@ using namespace std;
 
 enum charType {
 	LETTER,
-	DIGIT,
-	SYMBOL
+	DIGIT
 };
 
 enum tokenType {
+	COMMENT,
 	ID,
 	NUMBER,
 	OP,
+	ASSIGNMENT,
 	STRING,
 	KEYWORD,
 	END
@@ -27,12 +28,39 @@ enum tokenType {
 class Lexer
 {
 private:
+
 	unordered_map<char, charType> alphabet;
+	unordered_map<string, tokenType> specialTokens = {
+		{"#", COMMENT},
+		{"=", ASSIGNMENT},
+		{";", END}
+	};
+	unordered_map<string, string> KEYWORDS = {
+		{"int", "Integer value"},
+		{"char", "Character value"},
+		{"real", "Real value (otherwise floating point)"},
+		{"bool", "Boolean value"},
+		{"true", "True boolean value"},
+		{"false", "False boolean value"},
+		{"const", "Constant declaration"},
+		{"while", "While loop statement"},
+		{"do", "Do while loop statement"},
+		{"if", "If statement"},
+		{"elif", "Else-if statement"},
+		{"else", "Else statement"},
+		{"print", "Print statement"},
+		{"start", "Special function to mark execution beginning"},
+		{"return", "Return statement"},
+		{"break", "Jumps to the end of the loop"},
+		{"continue", "Jumps to the beginning of the loop"},
+		{"new", "Declares a new variable"}
+	};
+
 public:
 
 	Lexer() {
 		
-		// Input alphabet file
+		// Open input alphabet file
 		string alphabetFileName = "alphabets.txt";
 		ifstream alphaIn(alphabetFileName, ifstream::in);
 		if (!alphaIn) {
@@ -40,7 +68,7 @@ public:
 			return;
 		}
 
-		// Build the alphabet
+		// Hash the alphabet from the file
 		char b;
 		while (b = alphaIn.get()) {
 			if (b == '\n')
@@ -52,18 +80,29 @@ public:
 				break;
 			alphabet[b] = DIGIT;
 		}
+
+		// Hash the operator tokens frome the file
 		while (b = alphaIn.get()) {
 			if (b == '\n' || alphaIn.eof())
 				break;
-			alphabet[b] = SYMBOL;
+			string s(1, b);
+			specialTokens[s] = OP;
 		}
 
-		unordered_map<char, charType>::iterator it;
-		while (it != alphabet.end()) {
-			cout << it->first;
-			it++;
-		}
+		alphaIn.close();
 
+		// Hash the key word tokens
+		vector<pair<string, string>> keywords;
+		copy(KEYWORDS.begin(), KEYWORDS.end(), back_inserter(keywords));
+		for (int i = 0; i < keywords.size(); i++) {
+			specialTokens[keywords[i].first] = KEYWORD;
+		}
 	}
+
+	void lex(string filename) {
+		vector<pair<string, tokenType>> tokens;
+		
+	}
+
 };
 
