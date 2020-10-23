@@ -9,6 +9,7 @@ using namespace std;
 int main()
 {
     Lexer l;
+    l.lex("sampleCode.txt");
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

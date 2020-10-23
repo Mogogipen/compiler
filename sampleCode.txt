@@ -1,0 +1,4 @@
+#Comment
+"Here's a string";
+int x = 0;
+bool b = true;

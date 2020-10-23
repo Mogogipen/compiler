@@ -31,6 +31,9 @@
     <Text Include="alphabets.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="sampleCode.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\Downloads\Assignment 2.pdf" />

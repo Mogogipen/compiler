@@ -22,6 +22,8 @@ enum tokenType {
 	ASSIGNMENT,
 	STRING,
 	KEYWORD,
+	OPENP,
+	CLOSEP,
 	END
 };
 
@@ -52,14 +54,66 @@ private:
 		{"start", "Special function to mark execution beginning"},
 		{"return", "Return statement"},
 		{"break", "Jumps to the end of the loop"},
-		{"continue", "Jumps to the beginning of the loop"},
-		{"new", "Declares a new variable"}
+		{"continue", "Jumps to the beginning of the loop"}
 	};
 
 public:
 
+	pair<bool, tokenType> matchTokenType(string s) {
+		if (s.size() == 1) {
+
+		}
+	}
+
+	void lex(string filename) {
+		vector<pair<string, tokenType>> tokens;
+
+		// Load file
+		ifstream inf(filename, ifstream::in);
+		if (!inf) {
+			cout << "Invalid alphabet file";
+			return;
+		}
+
+		// Parse file
+		string current;
+		while (!inf.eof()) {
+			char next = inf.get();
+			bool lexemeParsed = false;
+			string old;
+			while (!lexemeParsed || !inf.eof()) {
+				// If a "#" is encountered, skip to next line
+				if (next == '#') {
+					while (inf.get() != '\n') {
+
+					}
+					break;
+				}
+				// If a "\"" is encountered, add everything to a string type until another "\"" is encountered
+				else if (next == '"') {
+					next = inf.get();
+					while (next != '"' || !inf.eof()) {
+						if (next == '\t');
+						else
+							current.append(1, next);
+					}
+					tokens.push_back({current, STRING});
+					current.clear();
+					break;
+				}
+				old = current;
+				current.append(1, next);
+				pair<bool, tokenType> matches = matchTokenType(current);
+			}
+		}
+
+
+		// Output lexemes to command line
+		cout << current;
+	}
+
 	Lexer() {
-		
+
 		// Open input alphabet file
 		string alphabetFileName = "alphabets.txt";
 		ifstream alphaIn(alphabetFileName, ifstream::in);
@@ -97,11 +151,6 @@ public:
 		for (int i = 0; i < keywords.size(); i++) {
 			specialTokens[keywords[i].first] = KEYWORD;
 		}
-	}
-
-	void lex(string filename) {
-		vector<pair<string, tokenType>> tokens;
-		
 	}
 
 };

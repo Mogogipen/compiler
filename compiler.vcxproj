@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="alphabets.txt" />
+    <Text Include="sampleCode.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\Downloads\Assignment 2.pdf" />
