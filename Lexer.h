@@ -63,53 +63,64 @@ public:
 		if (s.size() == 1) {
 
 		}
+		return {false, NUMBER};
 	}
 
 	void lex(string filename) {
-		vector<pair<string, tokenType>> tokens;
+		vector<pair<string, tokenType>> lexemes;
 
 		// Load file
 		ifstream inf(filename, ifstream::in);
 		if (!inf) {
-			cout << "Invalid alphabet file";
+			cout << "Invalid input file";
 			return;
 		}
 
+		//
 		// Parse file
+		//
 		string current;
+		char next = inf.get();
 		while (!inf.eof()) {
-			char next = inf.get();
-			bool lexemeParsed = false;
-			string old;
-			while (!lexemeParsed || !inf.eof()) {
-				// If a "#" is encountered, skip to next line
-				if (next == '#') {
-					while (inf.get() != '\n') {
+			// If a "#" is encountered, skip to next line
+			if (next == '#') {
+				while (inf.get() != '\n') {
 
-					}
-					break;
 				}
-				// If a "\"" is encountered, add everything to a string type until another "\"" is encountered
-				else if (next == '"') {
+			}
+			// If a "\"" is encountered, add everything to a string type until another "\"" is encountered
+			else if (next == '"') {
+				next = inf.get();
+				while (next != '"' && !inf.eof()) {
+					if (next == '\t');
+					else
+						current.append(1, next);
 					next = inf.get();
-					while (next != '"' || !inf.eof()) {
-						if (next == '\t');
-						else
-							current.append(1, next);
-					}
-					tokens.push_back({current, STRING});
-					current.clear();
-					break;
 				}
-				old = current;
+				lexemes.push_back({current, STRING});
+				current.clear();
+			}
+			// Every other token
+			else {
+				string old = current;
 				current.append(1, next);
 				pair<bool, tokenType> matches = matchTokenType(current);
 			}
+			next = inf.get();
 		}
 
+		//
+		//
+		//
 
 		// Output lexemes to command line
-		cout << current;
+		for (pair<string, tokenType> t : lexemes) {
+			cout << "Lexeme: " << t.first << "\t\t";
+			cout << "Token: " << t.second;
+			if (t.second == KEYWORD)
+				cout << " | " << "Description: " << KEYWORDS[t.first];
+			cout << '\n';
+		}
 	}
 
 	Lexer() {
