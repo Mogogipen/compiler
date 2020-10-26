@@ -65,12 +65,10 @@ private:
 public:
 
 	pair<bool, string> matchTokenType(string s) {
+		cout << '"' << s << "\"\n";
 		pair<bool, string> result = {false, ""};
-		// Check for spaces
-		if (s.find(' ') >= 0 || s.find('\n') >= 0 || s.find('\t') >= 0)
-			cout << "Parse error";
 		// Special tokens check
-		else if ((result.second = specialTokens[s]) != "") {
+		if ((result.second = specialTokens[s]) != "") {
 			result.first = true;
 		}
 		// ID tokens check
@@ -100,6 +98,10 @@ public:
 		return result;
 	}
 
+	bool isWhiteSpace(char c) {
+		return (c == ' ' || c == '\t' || c == '\n');
+	}
+
 	void lex(string filename) {
 		vector<pair<string, string>> lexemes;
 
@@ -113,8 +115,16 @@ public:
 		//
 		// Parse file
 		//
+		char old = 0;
 		while (!inf.eof()) {
-			char next = inf.get();
+			char next;
+			if (old == 0) {
+				next = inf.get();
+			}
+			else {
+				next = old;
+				old = 0;
+			}
 			string currentLex;
 			// If a "#" is encountered, skip to next line
 			if (next == '#') {
@@ -123,7 +133,7 @@ public:
 				}
 			}
 			// If whitespace is encountered, skip it
-			else if (next == ' ' || next == '\n' || next == '\t');
+			else if (isWhiteSpace(next));
 			// If a "\"" is encountered, add everything to a string type until another "\"" is encountered
 			else if (next == '"') {
 				next = inf.get();
@@ -137,9 +147,19 @@ public:
 			}
 			// Every other token
 			else {
-				string oldLex = currentLex;
-				currentLex.append(1, next);
-				pair<bool, string> matches = matchTokenType(currentLex);
+				string oldLex;
+				pair<bool, string> match = { false, "" };
+				do {
+					oldLex = currentLex;
+					currentLex += next;
+					match = matchTokenType(currentLex);
+					if (match.first)
+						next = inf.get();
+				} while (match.first);
+				match = matchTokenType(oldLex);
+				if (match.first)
+					lexemes.push_back({ oldLex, match.second });
+				old = next;
 			}
 		}
 		//
