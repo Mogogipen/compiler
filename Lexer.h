@@ -62,10 +62,12 @@ private:
 		{"continue", "Jumps to the beginning of the loop"}
 	};
 
+	vector<string> unrecognizedSymbols = {};
+
 public:
 
+	// Primary method for identifying "all other tokens"
 	pair<bool, string> matchTokenType(string s) {
-		cout << '"' << s << "\"\n";
 		pair<bool, string> result = {false, ""};
 		// Special tokens check
 		if ((result.second = specialTokens[s]) != "") {
@@ -94,6 +96,13 @@ public:
 			}
 			if (valid)
 				result = { true, "NUMBER" };
+		}
+		else if (s.size() == 1) {
+			for (string t : unrecognizedSymbols) {
+				if (s == t)
+					return result;
+			}
+			unrecognizedSymbols.push_back(s);
 		}
 		return result;
 	}
@@ -128,7 +137,7 @@ public:
 			string currentLex;
 			// If a "#" is encountered, skip to next line
 			if (next == '#') {
-				while (inf.get() != '\n') {
+				while (inf.get() != '\n' && !inf.eof()) {
 
 				}
 			}
@@ -151,15 +160,18 @@ public:
 				pair<bool, string> match = { false, "" };
 				do {
 					oldLex = currentLex;
+					if (inf.eof()) {
+						break;
+					}
 					currentLex += next;
 					match = matchTokenType(currentLex);
-					if (match.first)
+					if (match.first || (!match.first && currentLex.size() == 1))
 						next = inf.get();
 				} while (match.first);
+				old = next;
 				match = matchTokenType(oldLex);
 				if (match.first)
 					lexemes.push_back({ oldLex, match.second });
-				old = next;
 			}
 		}
 		//
@@ -173,6 +185,12 @@ public:
 			if (t.second == "KEYWORD")
 				cout << " | " << "Description: " << KEYWORDS[t.first];
 			cout << '\n';
+		}
+
+		// Output unrecognized symbols
+		if (unrecognizedSymbols.size() > 0) {
+			for (string s : unrecognizedSymbols)
+				cout << "Unrecognized symbol: " << s << '\n';
 		}
 	}
 
