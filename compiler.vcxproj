@@ -151,9 +151,6 @@
     <Text Include="alphabets.txt" />
     <Text Include="sampleCode.txt" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\..\Downloads\Assignment 2.pdf" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -35,7 +35,4 @@
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\..\Downloads\Assignment 2.pdf" />
-  </ItemGroup>
 </Project>
