@@ -36,6 +36,8 @@ private:
 	unordered_map<char, string> alphabet;
 	unordered_map<string, string> specialTokens = { // Will also contain operators and keywords
 		{"=", "ASSIGNMENT"},
+		{"++", "OPERATOR"},
+		{"--", "OPERATOR"},
 		{"(", "OPENP"},
 		{")", "CLOSEP"},
 		{"{", "OPENCP"},
