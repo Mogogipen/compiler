@@ -1,5 +1,5 @@
 #Comment
 "Here's a string";
-int x = 0;
+int x =@ 0;
 bool b = true;
 real r = 30.40;

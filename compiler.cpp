@@ -3,13 +3,26 @@
 
 #include <iostream>
 #include "Lexer.cpp"
+#include "Parser.cpp"
 
 using namespace std;
 
 int main()
 {
     Lexer l;
-    l.lex("sampleCode.txt");
+    bool proceed = l.lex("sampleCode.txt");
+	
+	// Uncomment to print the lexeme table
+	//if (proceed) {
+	//	for (pair<string, string> t : l.lexemes) {
+	//		cout << "Lexeme: " << t.first << "\t\t";
+	//		cout << "Token: " << t.second;
+	//		if (t.second == "KEYWORD")
+	//			cout << " | " << "Description: " << l.KEYWORDS[t.first];
+	//		cout << '\n';
+	//	}
+	//}
+	
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

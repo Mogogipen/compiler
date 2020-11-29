@@ -19,6 +19,8 @@ private:
 		"OTHER"
 	};
 
+public:
+
 	vector<string> tokenTypes {
 		"STRING",
 		"NUMBER",
@@ -64,9 +66,11 @@ private:
 		{"continue", "Jumps to the beginning of the loop"}
 	};
 
-	vector<string> unrecognizedSymbols = {};
+	vector<pair<string, string>> lexemes;
 
-public:
+private:
+
+	vector<string> unrecognizedSymbols = {};
 
 	// Primary method for identifying "all other tokens"
 	pair<bool, string> matchTokenType(string s) {
@@ -113,14 +117,15 @@ public:
 		return (c == ' ' || c == '\t' || c == '\n');
 	}
 
-	void lex(string filename) {
-		vector<pair<string, string>> lexemes;
+public:
+
+	bool lex(string filename) {
 
 		// Load file
 		ifstream inf(filename, ifstream::in);
 		if (!inf) {
 			cout << "Invalid input file";
-			return;
+			return NULL;
 		}
 
 		//
@@ -180,19 +185,14 @@ public:
 		//
 		//
 
-		// Output lexemes to command line
-		for (pair<string, string> t : lexemes) {
-			cout << "Lexeme: " << t.first << "\t\t";
-			cout << "Token: " << t.second;
-			if (t.second == "KEYWORD")
-				cout << " | " << "Description: " << KEYWORDS[t.first];
-			cout << '\n';
-		}
-
-		// Output unrecognized symbols
+		// Output error for unrecognized symbols
 		if (unrecognizedSymbols.size() > 0) {
-			for (string s : unrecognizedSymbols)
-				cout << "Unrecognized symbol: " << s << '\n';
+			cerr << "Unrecognized Symbol: " << unrecognizedSymbols[0];
+			return false;
+		}
+		// Return symbol table if no errors encountered
+		else {
+			return true;
 		}
 	}
 
