@@ -1,13 +1,13 @@
 #pragma once
-class Parser
-{
+
+#include <unordered_map>
+#include "Variable.cpp"
+
+class Parser {
 private:
-	vector<string> TYPES = {
-		"bool",
-		"real",
-		"int",
-		"char"
-	}
+
+	unordered_map<string, TYPE> variableTypes;
+	unordered_map<string, bool> booleanVars;
 	//TODO list:
 	//	Implement variable assignment
 	//	Implement variable altering

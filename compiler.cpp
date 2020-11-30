@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Lexer.cpp"
 #include "Parser.cpp"
+#include "Variable.cpp"
 
 using namespace std;
 
@@ -11,6 +12,9 @@ int main()
 {
     Lexer l;
     bool proceed = l.lex("sampleCode.txt");
+
+	Variable b("b", true);
+	cout << b.getValue();
 	
 	// Uncomment to print the lexeme table
 	//if (proceed) {
