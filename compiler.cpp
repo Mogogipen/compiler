@@ -12,20 +12,13 @@ int main()
 {
     Lexer l;
     bool proceed = l.lex("sampleCode.txt");
-
-	Variable b("b", true);
-	cout << b.getValue();
 	
-	// Uncomment to print the lexeme table
-	//if (proceed) {
-	//	for (pair<string, string> t : l.lexemes) {
-	//		cout << "Lexeme: " << t.first << "\t\t";
-	//		cout << "Token: " << t.second;
-	//		if (t.second == "KEYWORD")
-	//			cout << " | " << "Description: " << l.KEYWORDS[t.first];
-	//		cout << '\n';
-	//	}
-	//}
+	if (proceed) {
+		// Uncomment to print the lexeme table
+		l.printLexTable();
+
+		Parser p(l);
+	}
 	
 }
 

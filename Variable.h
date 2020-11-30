@@ -5,10 +5,10 @@
 using namespace std;
 
 enum TYPE {
-	boolean,
-	real,
-	inte,
-	chara
+	BOOL,
+	REAL,
+	INT,
+	CHAR
 };
 
 class Variable
@@ -21,10 +21,10 @@ private:
 
 public:
 	Variable(TYPE t, string n, int v = 0, double r = 0.0) : type(t), name(n), val(v), rVal(r) {};
-	Variable(string n, bool v) : Variable(TYPE::boolean, n, v) {};
-	Variable(string n, int v) : Variable(TYPE::inte, n, v) {};
-	Variable(string n, char v) : Variable(TYPE::chara, n, v) {};
-	Variable(string n, double r) : Variable(TYPE::real, n, 0, r) {};
+	Variable(string n, bool v) : Variable(TYPE::BOOL, n, v) {};
+	Variable(string n, int v) : Variable(TYPE::INT, n, v) {};
+	Variable(string n, char v) : Variable(TYPE::CHAR, n, v) {};
+	Variable(string n, double r) : Variable(TYPE::REAL, n, 0, r) {};
 
 	TYPE getType() {
 		return type;
@@ -35,7 +35,7 @@ public:
 	}
 
 	int getValue() {
-		if (type == boolean)
+		if (type == BOOL)
 			return (val != 0);
 		else {
 			return val;

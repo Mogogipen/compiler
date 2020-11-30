@@ -9,42 +9,44 @@
 
 using namespace std;
 
+enum tokenType {
+	UT,
+	STRING,
+	NUMBER,
+	ID,
+	OP,
+	KEYWORD,
+	ASSIGNMENT,
+	OPENP,
+	CLOSEP,
+	OPENCP,
+	CLOSECP,
+	END
+};
+
 class Lexer
 {
 private:
 
-	vector<string> charTypes {
-		"LETTER",
-		"DIGIT",
-		"OTHER"
+	enum charType {
+		UC,
+		LETTER,
+		DIGIT,
+		OTHER
 	};
 
 public:
 
-	vector<string> tokenTypes {
-		"STRING",
-		"NUMBER",
-		"ID",
-		"OP",
-		"KEYWORD",
-		"ASSIGNMENT",
-		"OPENP",
-		"CLOSEP",
-		"OPENCP",
-		"CLOSECP",
-		"END"
-	};
-
-	unordered_map<char, string> alphabet;
-	unordered_map<string, string> specialTokens = { // Will also contain operators and keywords
-		{"=", "ASSIGNMENT"},
-		{"++", "OPERATOR"},
-		{"--", "OPERATOR"},
-		{"(", "OPENP"},
-		{")", "CLOSEP"},
-		{"{", "OPENCP"},
-		{"}", "CLOSECP"},
-		{";", "END"}
+	unordered_map<char, charType> alphabet;
+	unordered_map<string, tokenType> specialTokens = { // Will also contain operators and keywords
+		{"=", ASSIGNMENT},
+		{"++", OP},
+		{"--", OP},
+		{"(", OPENP},
+		{")", CLOSEP},
+		{"{", OPENCP},
+		{"}", CLOSECP},
+		{";", END}
 	};
 	unordered_map<string, string> KEYWORDS = {
 		{"int", "Integer value"},
@@ -66,42 +68,42 @@ public:
 		{"continue", "Jumps to the beginning of the loop"}
 	};
 
-	vector<pair<string, string>> lexemes;
+	vector<pair<string, tokenType>> lexemes;
 
 private:
 
 	vector<string> unrecognizedSymbols = {};
 
 	// Primary method for identifying "all other tokens"
-	pair<bool, string> matchTokenType(string s) {
-		pair<bool, string> result = {false, ""};
+	pair<bool, tokenType> matchTokenType(string s) {
+		pair<bool, tokenType> result = {false, UT};
 		// Special tokens check
-		if ((result.second = specialTokens[s]) != "") {
+		if ((result.second = specialTokens[s]) != UC) {
 			result.first = true;
 		}
 		// ID tokens check
-		else if (alphabet[s[0]] == "LETTER") {
+		else if (alphabet[s[0]] == LETTER) {
 			bool valid = true;
 			for (char c : s) {
-				if (alphabet[c] == "") {
+				if (alphabet[c] == UC) {
 					valid = false;
 					break;
 				}
 			}
 			if (valid)
-				result = {true, "ID"};
+				result = {true, ID};
 		}
 		// NUMBER tokens check
-		else if (alphabet[s[0]] == "DIGIT") {
+		else if (alphabet[s[0]] == DIGIT) {
 			bool valid = true;
 			for (char c : s) {
-				if (alphabet[c] != "DIGIT") {
+				if (alphabet[c] != DIGIT) {
 					valid = false;
 					break;
 				}
 			}
 			if (valid)
-				result = { true, "NUMBER" };
+				result = { true, NUMBER };
 		}
 		else if (s.size() == 1) {
 			for (string t : unrecognizedSymbols) {
@@ -159,12 +161,12 @@ public:
 						currentLex.append(1, next);
 					next = inf.get();
 				}
-				lexemes.push_back({ currentLex, "STRING" });
+				lexemes.push_back({ currentLex, STRING });
 			}
 			// Every other token
 			else {
 				string oldLex;
-				pair<bool, string> match = { false, "" };
+				pair<bool, tokenType> match = { false, UT };
 				do {
 					oldLex = currentLex;
 					if (inf.eof()) {
@@ -196,6 +198,31 @@ public:
 		}
 	}
 
+	void printLexTable() {
+		for (pair<string, tokenType> t : lexemes) {
+			cout << "Lexeme: " << t.first << "\t\t";
+			cout << "Token: " << tokenTypeAsString(t.second);
+			if (t.second == KEYWORD)
+				cout << " | " << "Description: " << KEYWORDS[t.first];
+			cout << '\n';
+		}
+	}
+
+	string tokenTypeAsString(tokenType t) {
+		if (t == STRING) return "STRING";
+		if (t == NUMBER) return "NUMBER";
+		if (t == ID) return "ID";
+		if (t == OP) return "OP";
+		if (t == KEYWORD) return "KEYWORD";
+		if (t == ASSIGNMENT) return "ASSIGNMENT";
+		if (t == OPENP) return "OPENP";
+		if (t == CLOSEP) return "CLOSEP";
+		if (t == OPENCP) return "OPENCP";
+		if (t == CLOSECP) return "CLOSECP";
+		if (t == END) return "END";
+		return "ERROR";
+	}
+
 	Lexer() {
 
 		// Open input alphabet file
@@ -211,21 +238,21 @@ public:
 		while (b = alphaIn.get()) {
 			if (b == '\n')
 				break;
-			alphabet[b] = "LETTER";
+			alphabet[b] = LETTER;
 		}
 		while (b = alphaIn.get()) {
 			if (b == '\n')
 				break;
-			alphabet[b] = "DIGIT";
+			alphabet[b] = DIGIT;
 		}
-		alphabet['_'] = "OTHER";
+		alphabet['_'] = OTHER;
 
 		// Hash the operator tokens frome the file
 		while (b = alphaIn.get()) {
 			if (b == '\n' || alphaIn.eof())
 				break;
 			string s(1, b);
-			specialTokens[s] = "OP";
+			specialTokens[s] = OP;
 		}
 
 		alphaIn.close();
@@ -234,7 +261,7 @@ public:
 		vector<pair<string, string>> keywords;
 		copy(KEYWORDS.begin(), KEYWORDS.end(), back_inserter(keywords));
 		for (int i = 0; i < keywords.size(); i++) {
-			specialTokens[keywords[i].first] = "KEYWORD";
+			specialTokens[keywords[i].first] = KEYWORD;
 		}
 	}
 
