@@ -11,6 +11,7 @@ using namespace std;
 
 enum tokenType {
 	UT,
+	CHARVAL,
 	STRING,
 	NUMBER,
 	ID,
@@ -53,6 +54,7 @@ public:
 		{"char", "Character value"},
 		{"real", "Real value (otherwise floating point)"},
 		{"bool", "Boolean value"},
+		{"string", "String value"},
 		{"true", "True boolean value"},
 		{"false", "False boolean value"},
 		{"const", "Constant declaration"},
@@ -163,6 +165,18 @@ public:
 				}
 				lexemes.push_back({ currentLex, STRING });
 			}
+			else if (next == '\'') {
+				next = inf.get();
+				if (next == '\'')
+					unrecognizedSymbols.push_back("'");
+				else {
+					currentLex.append(1, next);
+					next = inf.get();
+					if (next != '\'')
+						unrecognizedSymbols.push_back(string(1, next));
+					lexemes.push_back({ currentLex, CHARVAL });
+				}
+			}
 			// Every other token
 			else {
 				string oldLex;
@@ -210,6 +224,7 @@ public:
 
 	string tokenTypeAsString(tokenType t) {
 		if (t == STRING) return "STRING";
+		if (t == CHARVAL) return "CHAR";
 		if (t == NUMBER) return "NUMBER";
 		if (t == ID) return "ID";
 		if (t == OP) return "OP";

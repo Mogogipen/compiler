@@ -1,5 +1,6 @@
 #Comment
-"Here's a string";
+string s = "Here's a string";
+char c = 'c';
 int x = 0;
 bool b = true;
 real r = 30.40;

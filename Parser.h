@@ -17,14 +17,9 @@ private:
 	unordered_map<string, Variable> vars;
 	Lexer l;
 
-	//
-	// Evaluations
-	//
-
 	// Declare a variable
 	void decVar(vector<pair<string, tokenType>>& line, TYPE t) {
-		if (t == BOOL);
-			//bool val = evalBool(vector<pair<string, string>>(line.begin(), line.end()));
+		
 	}
 
 	void parseLine(vector<pair<string, tokenType>>& line) {
@@ -36,7 +31,7 @@ private:
 
 		for (pair<string, tokenType> lexeme : l.lexemes) {
 			// If the current lex is the end of the line, parse the line
-			if (lexeme.second == END || OPENCP) {
+			if (lexeme.second == END || lexeme.second == OPENCP) {
 				parseLine(line);
 				line.clear();
 			}
