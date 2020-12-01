@@ -22,7 +22,8 @@ enum tokenType {
 	CLOSEP,
 	OPENCP,
 	CLOSECP,
-	END
+	END,
+	EXP
 };
 
 class Lexer
@@ -43,6 +44,9 @@ public:
 		{"=", ASSIGNMENT},
 		{"++", OP},
 		{"--", OP},
+		{"==", OP},
+		{"<=", OP},
+		{">=", OP},
 		{"(", OPENP},
 		{")", CLOSEP},
 		{"{", OPENCP},
